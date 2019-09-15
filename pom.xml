@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.equals</groupId>
 	<artifactId>finance-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>finance-api</name>
 	<description>Uma API em Java e Spring Framework para gerenciamento de transações financeiras.</description>
 	

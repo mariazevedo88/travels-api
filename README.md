@@ -143,7 +143,7 @@ mvn integration-test
 Para rodar a API via .jar:
 
 ```
-java -jar financial-java-api-1.1.0.jar --spring.profiles.active=prod
+java -jar financial-java-api-1.0.0.jar --spring.profiles.active=prod
 ```
     
 ou

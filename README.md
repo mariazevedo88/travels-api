@@ -143,13 +143,13 @@ mvn integration-test
 Para rodar a API via .jar:
 
 ```
-java -jar financial-java-api-1.0.0.jar --spring.profiles.active=prod
+java -jar finance-api-1.0.1.jar --spring.profiles.active=dev
 ```
     
 ou
 
 ```
-mvn spring-boot:run -Dspring.profiles.active=prod
+mvn spring-boot:run -Dspring.profiles.active=dev
 ```
 
 Por default, a API está disponível no endereço [http://localhost:8080/](http://localhost:8080/)

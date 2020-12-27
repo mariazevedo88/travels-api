@@ -1,4 +1,4 @@
-package io.github.mariazevedo88.financeapi.model;
+package io.github.mariazevedo88.tripsapi.model;
 
 import java.math.BigDecimal;
 

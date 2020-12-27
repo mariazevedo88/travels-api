@@ -1,13 +1,13 @@
-package io.github.mariazevedo88.financeapi;
+package io.github.mariazevedo88.tripsapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FinanceApiApplication {
+public class TripsApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FinanceApiApplication.class, args);
+		SpringApplication.run(TripsApiApplication.class, args);
 	}
 
 }

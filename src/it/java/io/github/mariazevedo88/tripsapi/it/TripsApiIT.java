@@ -1,4 +1,4 @@
-package io.github.mariazevedo88.financeapi.it;
+package io.github.mariazevedo88.tripsapi.it;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Order;
@@ -28,7 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.mariazevedo88.financeapi.enumeration.TransactionTypeEnum;
+import io.github.mariazevedo88.tripsapi.enumeration.TripTypeEnum;
 
 /**
  * Class that implements API integration tests
@@ -43,7 +44,7 @@ import io.github.mariazevedo88.financeapi.enumeration.TransactionTypeEnum;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class FinanceApiIT {
+public class TripsApiIT {
 	
 	@Autowired
     private MockMvc mockMvc;
@@ -56,46 +57,50 @@ public class FinanceApiIT {
 	
 	@Test
 	@Order(2)
-	public void shouldReturnCreateATransaction() throws Exception {
+	public void shouldReturnCreateATrip() throws Exception {
 
 		JSONObject mapToCreate = setObjectToCreate();
-		this.mockMvc.perform(post("/financial/v1/transactions").contentType(MediaType.APPLICATION_JSON_VALUE)
+		this.mockMvc.perform(post("/tripsapi/v1/trips").contentType(MediaType.APPLICATION_JSON_VALUE)
         		.content(new ObjectMapper().writeValueAsString(mapToCreate))).andExpect(status().isCreated());
 	}
 	
 	@Test
 	@Order(3)
-	public void shouldReturnUpdateATransaction() throws Exception {
+	public void shouldReturnUpdateATrip() throws Exception {
 		
 		JSONObject mapToUpdate = setObjectToUpdate();
-		this.mockMvc.perform(put("/financial/v1/transactions/1").contentType(MediaType.APPLICATION_JSON_VALUE)
+		this.mockMvc.perform(put("/tripsapi/v1/trips/1").contentType(MediaType.APPLICATION_JSON_VALUE)
         		.content(new ObjectMapper().writeValueAsString(mapToUpdate))).andExpect(status().isOk());
 	}
 
 	@Test
 	@Order(4)
-    public void shouldReturnGetAllTransactions() throws Exception {
-		this.mockMvc.perform(get("/financial/v1/transactions")).andExpect(status().isOk());
+    public void shouldReturnGetAllTrips() throws Exception {
+		this.mockMvc.perform(get("/tripsapi/v1/trips")).andExpect(status().isOk());
     }
 	
 	@Test
 	@Order(5)
-    public void shouldReturnRemoveAllTransactions() throws Exception {
-		this.mockMvc.perform(delete("/financial/v1/transactions")).andExpect(status().isNoContent());
+    public void shouldReturnRemoveAllTrips() throws Exception {
+		this.mockMvc.perform(delete("/tripsapi/v1/trips")).andExpect(status().isNoContent());
     }
 	
 	@SuppressWarnings("unchecked")
 	private JSONObject setObjectToCreate() {
 		
-		String localDate = LocalDateTime.now().toString().concat("Z");
+		LocalDateTime now = LocalDateTime.of(2020, Month.DECEMBER, 1, 20, 0, 0);
+		String localDate = now.toString().concat("Z");
+		
+		LocalDateTime finalD = LocalDateTime.of(2020, Month.DECEMBER, 31, 20, 0, 0);
+		String finalDate = finalD.toString().concat("Z");
 		
 		JSONObject map = new JSONObject();
-		map.put("id", 1L);
-		map.put("nsu", "220788");
-		map.put("autorizationNumber", "010203");
+		map.put("id", 1);
+		map.put("orderCode", "220788");
 		map.put("amount", "22.88");
-		map.put("transactionDate", localDate);
-		map.put("type", TransactionTypeEnum.CARD);
+		map.put("type", TripTypeEnum.RETURN.getValue());
+		map.put("initialDate", localDate);
+		map.put("finalDate", finalDate);
 		
 		return map;
 	}
@@ -107,11 +112,10 @@ public class FinanceApiIT {
 		
 		JSONObject map = new JSONObject();
 		map.put("id", 1L);
-		map.put("nsu", "220788");
-		map.put("autorizationNumber", "000000");
+		map.put("orderCode", "220788");
 		map.put("amount", "22.88");
-		map.put("transactionDate", localDate);
-		map.put("type", TransactionTypeEnum.CARD);
+		map.put("type", TripTypeEnum.ONE_WAY.getValue());
+		map.put("initialDate", localDate);
 		
 		return map;
 	}

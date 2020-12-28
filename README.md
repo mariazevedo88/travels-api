@@ -1,53 +1,53 @@
-# finance-api
+# trips-api
 
-Uma API em Java e Spring Framework para gerenciamento de transações financeiras.
+Uma API em Java e Spring Framework para gerenciamento de viagens.
 
 ## Como a API deve funcionar?
 
-Nossa API deve criar, atualizar, deletar e listar transações financeiras. Além disso, deve calcular estatísticas sobre as transações criadas. A API terá os seguintes endpoints:
+Nossa API deve criar, atualizar, deletar e listar viagens. Além disso, deve calcular estatísticas sobre as viagens criadas. A API terá os seguintes endpoints:
 
-`POST/transaction`: cria uma transação. 
+`POST/trips`: cria uma viagem. 
 
 **Body:**
 
 <code>
 {
   "id": 1,
-  "nsu": "220788",
-  "autorizationNumber": "010203",
+  "orderCode": "220788",
   "amount": "22.88",
-  "transactionDate": "2019-09-11T09:59:51.312Z",
-  "type": "CARD"
+  "initialDate": "2019-09-11T09:59:51.312Z",
+  "finalDate": "2019-09-21T21:05:06.500Z",
+  "type": "RETURN"
 }
 </code>
 
 **Where:**
 
-`id`: número único da transação;
-`nsu`: número de identificação de uma transação de cartão de crédito. Pode ser nula se a transação for paga em dinheiro.
-`autorizationNumber`: é código único das transações online.
+`id`: número único da viagem;
+`orderCode`: número de identificação da viagem no sistema.
 `amount`: valor da transação; deve ser uma String de tamanho arbitrário que pode ser parseada como um BigDecimal;
-`transactionDate`: data da transação no formato ISO 8601 YYYY-MM-DDThh:mm:ss.sssZ no timezone local.
-`type`: se a transação é em cartão (CARD) ou em dinheiro (MONEY).
+`initialDate`: data de início da viagem no formato ISO 8601 YYYY-MM-DDThh:mm:ss.sssZ no timezone local.
+`finalDate`: data de fim da viagem no formato ISO 8601 YYYY-MM-DDThh:mm:ss.sssZ no timezone local.
+`type`: se a viagem é somente de ida (ONE-WAY), ida e volta (RETURN) ou múltiplos destinos (MULTI-CITY).
 
 Deve retornar com body vazio com um dos códigos a seguir:
 
-* 201: em caso de sucesso.
+* 201: caso a viagem seja criada com sucesso.
 * 400: caso o JSON seja inválido.
-* 422: se qualquer um dos campos não for parseável ou a data da transação está no futuro.
+* 422: se qualquer um dos campos não for parseável ou se a data de início for mais ao futuro que a data final.
+* 500: erro no servidor (são raros)
 
-`PUT/transaction/{id}`: atualiza uma transação.
+`PUT/trips/{id}`: atualiza uma viagem.
 
 **Body:**
 
 <code>
 {
-  "id": 1,
-  "nsu": "220788",
-  "autorizationNumber": "010203",
-  "amount": "30.06",
-  "transactionDate": "2019-09-11T09:59:51.312Z",
-  "type": "CARD"
+  "orderCode": "220788",
+  "amount": "50.50",
+  "initialDate": "2019-09-11T09:59:51.312Z",
+  "finalDate": "2019-09-21T21:05:06.500Z",
+  "type": "RETURN"
 }
 </code>
 
@@ -56,11 +56,11 @@ Deve ser enviado o objeto que será modificado. O retorno deve ser o próprio ob
 <code>
 {
   "id": 1,
-  "nsu": "220788",
-  "autorizationNumber": "010203",
-  "amount": "30.06",
-  "transactionDate": "2019-09-11T09:59:51.312Z",
-  "type": "CARD"
+  "orderCode": "220788",
+  "amount": "50.50",
+  "initialDate": "2019-09-11T09:59:51.312Z",
+  "finalDate": "2019-09-21T21:05:06.500Z",
+  "type": "RETURN"
 }
 </code>
 
@@ -71,56 +71,55 @@ A resposta deve conter os códigos a seguir:
 * 404: caso tentem atualizar um registro que não existe.
 * 422: se qualquer um dos campos não for parseável (JSON mal formatado).
 
-`GET/transactions`: retorna todas as transações criadas.
+`GET/trips`: retorna todas as viagens criadas.
 
-Deve retornar uma lista de transações.
+Deve retornar uma lista de viagens.
 
 <code>
-{   
+{
    "id": 1,
-   "nsu": "220788",
-   "autorizationNumber": "010203",
-   "amount": "30.06",
-   "transactionDate": "2019–09–11T09:59:51.312Z",
-   "type": "CARD"
+   "orderCode": "220788",
+   "amount": "22.88",
+   "initialDate": "2019-09-11T09:59:51.312Z",
+   "finalDate": "2019-09-21T21:05:06.500Z",
+   "type": "RETURN"
 },
 {   
    "id": 2,
-   "nsu": "300691",
-   "autorizationNumber": "040506",
+   "orderCode": "300691",
    "amount": "120.0",
-   "transactionDate": "2019–09–11T10:22:30.312Z",
-   "type": "CARD"
+   "initialDate": "2019–10–25T16:18:30.541Z",
+   "type": "ONE-WAY"
 }
 </code>
 
 A resposta deve conter os códigos a seguir:
 
-* 200: caso exista transações cadastradas
-* 404: caso não exista transações criadas.
+* 200: caso exista viagens cadastradas
+* 404: caso não exista viagens criadas.
 
-`DELETE/transactions`: remove todas as transações.
+`DELETE/trips`: remove todas as viagens.
 
 Deve aceitar uma requisição com body vazio e retornar 204.
 
-`GET/statistics`: retorna estatísticas básicas sobre as transações criadas.
+`GET/statistics`: retorna estatísticas básicas sobre as viagens criadas.
 
 <code>
 {   
-   "sum": "150.06",
-   "avg": "75.3",
+   "sum": "142.88",
+   "avg": "71.44",
    "max": "120.0",
-   "min": "30.06",
+   "min": "22.88",
    "count": "2"
 }
 </code>
 
 Em que:
-`sum`: um BigDecimal especificando a soma total das transações criadas.
-`avg`: um BigDecimal especificando a média dos valores das transações criadas.
-`max`: um BigDecimal especificando o maior valor dentre as transações criadas.
-`min`: um BigDecimal especificando o menor valor dentre as transações criadas.
-`count`: um long especificando o número total de transações.
+`sum`: um BigDecimal especificando a soma total das viagens criadas.
+`avg`: um BigDecimal especificando a média dos valores das viagens criadas.
+`max`: um BigDecimal especificando o maior valor dentre as viagens criadas.
+`min`: um BigDecimal especificando o menor valor dentre as viagens criadas.
+`count`: um long especificando o número total de viagens.
 
 Todos os campos que são BigDecimal devem ter apenas duas casas decimais, por exemplo: 15.385 deve ser retornado como 15.39. 
 
@@ -143,7 +142,7 @@ mvn integration-test
 Para rodar a API via .jar:
 
 ```
-java -jar finance-api-1.0.1.jar --spring.profiles.active=dev
+java -jar trips-api-2.0.0.jar --spring.profiles.active=dev
 ```
     
 ou

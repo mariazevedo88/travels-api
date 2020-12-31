@@ -7,9 +7,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDateTime;
-import java.time.Month;
-
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -88,11 +85,8 @@ public class TravelsApiIT {
 	@SuppressWarnings("unchecked")
 	private JSONObject setObjectToCreate() {
 		
-		LocalDateTime initialDate = LocalDateTime.of(2020, Month.DECEMBER, 1, 20, 0, 0);
-		String startDate = initialDate.toString().concat("Z");
-		
-		LocalDateTime finalDate = LocalDateTime.of(2020, Month.DECEMBER, 31, 20, 0, 0);
-		String endDate = finalDate.toString().concat("Z");
+		String startDate = "2019-11-21T09:59:51.312Z";
+		String endDate = "2019-12-01T21:08:45.202Z";
 		
 		JSONObject map = new JSONObject();
 		map.put("id", 1);
@@ -108,7 +102,7 @@ public class TravelsApiIT {
 	@SuppressWarnings("unchecked")
 	private JSONObject setObjectToUpdate() {
 		
-		String startDate = LocalDateTime.now().toString().concat("Z");
+		String startDate = "2019-11-21T09:59:51.312Z";
 		
 		JSONObject map = new JSONObject();
 		map.put("id", 1L);

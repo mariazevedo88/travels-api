@@ -4,8 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.ZonedDateTime;
 
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.AfterAll;
@@ -61,11 +60,8 @@ public class TravelsApiUnitTests {
 	@SuppressWarnings("unchecked")
 	public void shouldReturnTravelCreatedWithSuccess() throws Exception {
 		
-		LocalDateTime initialDate = LocalDateTime.of(2020, Month.DECEMBER, 1, 20, 0, 6);
-		String startDate = initialDate.toString().concat("Z");
-		
-		LocalDateTime finalDate = LocalDateTime.of(2020, Month.DECEMBER, 31, 20, 0, 6);
-		String endDate = finalDate.toString().concat("Z");
+		String startDate = "2019-11-21T09:59:51.312Z";
+		String endDate = "2019-12-01T21:08:45.202Z";
 		
 		JSONObject jsonTravel = new JSONObject();
 		jsonTravel.put("id", 1);
@@ -82,8 +78,8 @@ public class TravelsApiUnitTests {
 		assertEquals(travel.getOrderNumber(), jsonTravel.get("orderNumber"));
 		assertEquals(travel.getAmount().toString(), jsonTravel.get("amount"));
 		assertEquals(travel.getType().toString(), jsonTravel.get("type"));
-		assertEquals(travel.getStartDate(), initialDate);
-		assertEquals(travel.getEndDate(), finalDate);
+		assertEquals(travel.getStartDate(), ZonedDateTime.parse(startDate).toLocalDateTime());
+		assertEquals(travel.getEndDate(), ZonedDateTime.parse(endDate).toLocalDateTime());
 	}
 	
 	@Test
@@ -112,19 +108,16 @@ public class TravelsApiUnitTests {
 		
 		travelsService.delete();
 		
-		LocalDateTime initialDate = LocalDateTime.of(2020, Month.DECEMBER, 1, 20, 0, 6);
-		String startDate = initialDate.toString().concat("Z");
-		
-		LocalDateTime finalDate = LocalDateTime.of(2020, Month.DECEMBER, 31, 20, 0, 6);
-		String endDate = finalDate.toString().concat("Z");
+		String startDate = "2019-11-21T09:59:51.312Z";
+		String endDate = "2019-12-01T21:08:45.202Z";
 		
 		JSONObject jsonTravel220788 = new JSONObject();
 		jsonTravel220788.put("id", 1);
 		jsonTravel220788.put("orderCode", "220788");
 		jsonTravel220788.put("amount", "22.88");
 		jsonTravel220788.put("type", TravelTypeEnum.RETURN.getValue());
-		jsonTravel220788.put("initialDate", startDate);
-		jsonTravel220788.put("finalDate", endDate);
+		jsonTravel220788.put("startDate", startDate);
+		jsonTravel220788.put("endDate", endDate);
 		
 		Travel travel = travelsService.create(jsonTravel220788);
 		travelsService.add(travel);
@@ -134,8 +127,7 @@ public class TravelsApiUnitTests {
 		jsonTravel300691.put("orderCode", "300691");
 		jsonTravel300691.put("amount", "120.0");
 		jsonTravel300691.put("type", TravelTypeEnum.ONE_WAY.getValue());
-		jsonTravel300691.put("initialDate", startDate);
-		jsonTravel300691.put("finalDate", endDate);
+		jsonTravel300691.put("startDate", startDate);
 		
 		travel = travelsService.create(jsonTravel300691);
 		travelsService.add(travel);

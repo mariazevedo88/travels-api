@@ -115,7 +115,7 @@ public class TravelController {
 			if(tripService.isJSONValid(trip.toString())) {
 				Travel tripCreated = tripService.create(trip);
 				var uri = ServletUriComponentsBuilder.fromCurrentRequest()
-						.path(tripCreated.getOrderCode()).build().toUri();
+						.path(tripCreated.getOrderNumber()).build().toUri();
 				
 				if(tripService.isStartDateGreaterThanEndDate(tripCreated)){
 					logger.error("The start date is greater than end date.");
@@ -157,15 +157,15 @@ public class TravelController {
 	 * 500 - Server Errors: something went wrong on API end (These are rare).
 	 */
 	@PutMapping(path = "/{id}", produces = { "application/json" })
-	public ResponseEntity<Travel> update(@PathVariable("id") long id, @RequestBody JSONObject trip) {
+	public ResponseEntity<Travel> update(@PathVariable("id") long id, @RequestBody JSONObject travel) {
 		try {
-			if(tripService.isJSONValid(trip.toString())) {
+			if(tripService.isJSONValid(travel.toString())) {
 				Travel tripToUpdate = tripService.findById(id);
 				if(tripToUpdate == null){
 					logger.error("Travel not found.");
 					return ResponseEntity.notFound().build(); 
 				}else {
-					Travel tripUpdated = tripService.update(tripToUpdate, trip);
+					Travel tripUpdated = tripService.update(tripToUpdate, travel);
 					return ResponseEntity.ok(tripUpdated);
 				}
 			}else {

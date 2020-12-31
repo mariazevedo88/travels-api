@@ -3,7 +3,9 @@ package io.github.mariazevedo88.travelsapi.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -109,7 +111,8 @@ public class TravelService {
 	 */
 	private LocalDateTime parseStartDate(JSONObject travel) {
 		var startDate = (String) travel.get("startDate");
-		return ZonedDateTime.parse(startDate).toLocalDateTime();
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
+		return ZonedDateTime.parse(startDate, formatter.withZone(ZoneId.of("UTC"))).toLocalDateTime();
 	}
 	
 	/**
@@ -123,7 +126,8 @@ public class TravelService {
 	 */
 	private LocalDateTime parseEndDate(JSONObject travel) {
 		var endDate = (String) travel.get("endDate");
-		return ZonedDateTime.parse(endDate).toLocalDateTime();
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
+		return ZonedDateTime.parse(endDate, formatter.withZone(ZoneId.of("UTC"))).toLocalDateTime();
 	}
 	
 	/**
@@ -141,7 +145,7 @@ public class TravelService {
 	}
 	
 	/**
-	 * Method to fullfil the Trip object
+	 * Method to fullfil the Travel object
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 14/09/2019
@@ -149,15 +153,15 @@ public class TravelService {
 	 * @param jsonTravel
 	 * @param travel
 	 */
-	private void setTripValues(JSONObject jsonTravel, Travel travel) {
+	private void setTravelValues(JSONObject jsonTravel, Travel travel) {
 		
 		String orderNumber = (String) jsonTravel.get("orderNumber");
 		String type = (String) jsonTravel.get("type");
 		
 		travel.setOrderNumber(orderNumber != null ? orderNumber : travel.getOrderNumber());
 		travel.setAmount(jsonTravel.get("amount") != null ? parseAmount(jsonTravel) : travel.getAmount());
-		travel.setStartDate(jsonTravel.get("initialDate") != null ? parseStartDate(jsonTravel) : travel.getStartDate());
-		travel.setEndDate(jsonTravel.get("finalDate") != null ? parseEndDate(jsonTravel) : travel.getEndDate());
+		travel.setStartDate(jsonTravel.get("startDate") != null ? parseStartDate(jsonTravel) : travel.getStartDate());
+		travel.setEndDate(jsonTravel.get("endDate") != null ? parseEndDate(jsonTravel) : travel.getEndDate());
 		travel.setType(type != null ? TravelTypeEnum.getEnum(type) : travel.getType());
 	}
 	
@@ -176,7 +180,7 @@ public class TravelService {
 		
 		Travel travel = factory.createTravel((String) jsonTravel.get("type"));
 		travel.setId(parseId(jsonTravel));
-		setTripValues(jsonTravel, travel);
+		setTravelValues(jsonTravel, travel);
 		
 		return travel;
 	}
@@ -194,7 +198,7 @@ public class TravelService {
 	 */
 	public Travel update(Travel travel, JSONObject jsonTravel) {
 		
-		setTripValues(jsonTravel, travel);
+		setTravelValues(jsonTravel, travel);
 		return travel;
 	}
 

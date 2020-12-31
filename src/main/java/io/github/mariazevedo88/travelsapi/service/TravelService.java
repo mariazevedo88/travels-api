@@ -107,7 +107,7 @@ public class TravelService {
 	 * @param travel
 	 * @return LocalDateTime
 	 */
-	private LocalDateTime parseInitialDate(JSONObject travel) {
+	private LocalDateTime parseStartDate(JSONObject travel) {
 		var startDate = (String) travel.get("startDate");
 		return ZonedDateTime.parse(startDate).toLocalDateTime();
 	}
@@ -121,7 +121,7 @@ public class TravelService {
 	 * @param travel
 	 * @return LocalDateTime
 	 */
-	private LocalDateTime parseFinalDate(JSONObject travel) {
+	private LocalDateTime parseEndDate(JSONObject travel) {
 		var endDate = (String) travel.get("endDate");
 		return ZonedDateTime.parse(endDate).toLocalDateTime();
 	}
@@ -156,8 +156,8 @@ public class TravelService {
 		
 		travel.setOrderNumber(orderNumber != null ? orderNumber : travel.getOrderNumber());
 		travel.setAmount(jsonTravel.get("amount") != null ? parseAmount(jsonTravel) : travel.getAmount());
-		travel.setStartDate(jsonTravel.get("initialDate") != null ? parseInitialDate(jsonTravel) : travel.getStartDate());
-		travel.setEndDate(jsonTravel.get("finalDate") != null ? parseFinalDate(jsonTravel) : travel.getEndDate());
+		travel.setStartDate(jsonTravel.get("initialDate") != null ? parseStartDate(jsonTravel) : travel.getStartDate());
+		travel.setEndDate(jsonTravel.get("finalDate") != null ? parseEndDate(jsonTravel) : travel.getEndDate());
 		travel.setType(type != null ? TravelTypeEnum.getEnum(type) : travel.getType());
 	}
 	

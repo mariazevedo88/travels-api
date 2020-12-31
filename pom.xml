@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.github.mariazevedo88</groupId>
-	<artifactId>trips-api</artifactId>
+	<artifactId>travels-api</artifactId>
 	<version>2.0.0</version>
 	<name>trips-api</name>
 	<description>Uma API em Java e Spring Framework para gerenciamento de viagens.</description>

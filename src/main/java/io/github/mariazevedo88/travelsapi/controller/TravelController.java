@@ -1,4 +1,4 @@
-package io.github.mariazevedo88.tripsapi.controller;
+package io.github.mariazevedo88.travelsapi.controller;
 
 import java.util.List;
 
@@ -18,31 +18,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import io.github.mariazevedo88.tripsapi.model.Trip;
-import io.github.mariazevedo88.tripsapi.service.TripService;
+import io.github.mariazevedo88.travelsapi.model.Travel;
+import io.github.mariazevedo88.travelsapi.service.TravelService;
 
 /**
- * SpringBoot RestController that creates all service end-points related to the trips.
+ * SpringBoot RestController that creates all service end-points related to travels.
  * 
  * @author Mariana Azevedo
  * @since 14/09/2019
  */
 @RestController
-@RequestMapping("/tripsapi/v1/trips")
-public class TripController {
+@RequestMapping("/api-travels/v1/travels")
+public class TravelController {
 	
-	private static final Logger logger = Logger.getLogger(TripController.class);
+	private static final Logger logger = Logger.getLogger(TravelController.class);
 	
 	@Autowired
-	private TripService tripService;
+	private TravelService tripService;
 	
 	/**
-	 * Method that list all trips
+	 * Method that list all travels
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 14/09/2019
 	 * 
-	 * @return ResponseEntity with a <code>List<Trip></code> object and the HTTP status
+	 * @return ResponseEntity with a <code>List<Travel></code> object and the HTTP status
 	 * 
 	 * HTTP Status:
 	 * 
@@ -51,7 +51,7 @@ public class TripController {
 	 * 
 	 */
 	@GetMapping
-	public ResponseEntity<List<Trip>> find() {
+	public ResponseEntity<List<Travel>> find() {
 		if(tripService.find().isEmpty()) {
 			return ResponseEntity.notFound().build(); 
 		}
@@ -60,7 +60,7 @@ public class TripController {
 	}
 	
 	/**
-	 * Method that deletes all existing trips.
+	 * Method that deletes all existing travels.
 	 * 
 	 * @author Mariana Azevedo
 	 * @since 14/09/2019
@@ -91,10 +91,10 @@ public class TripController {
 	 * @param trip, where: 
 	 * 
 	 * id - trip id; 
-	 * orderCode - identification number of a trip in the system; 
+	 * orderNumber - identification number of a trip in the system; 
 	 * amount – transaction amount; a string of arbitrary length that is parsable as a BigDecimal; 
-	 * initialDate – initial date time in the ISO 8601 format YYYY-MM-DDThh:mm:ss.sssZ in the Local timezone;
-	 * finalDate – final date time in the ISO 8601 format YYYY-MM-DDThh:mm:ss.sssZ in the Local timezone; 
+	 * startDate – initial date time in the ISO 8601 format YYYY-MM-DDThh:mm:ss.sssZ in the Local time zone;
+	 * endDate – final date time in the ISO 8601 format YYYY-MM-DDThh:mm:ss.sssZ in the Local time zone; 
 	 * type - trip type: RETURN (with a date to begin and end), ONE_WAY (only with initial date), 
 	 * MULTI_CITY (with multiple destinations);
 	 * 
@@ -110,15 +110,15 @@ public class TripController {
 	 */
 	@PostMapping
 	@ResponseBody
-	public ResponseEntity<Trip> create(@RequestBody JSONObject trip) {
+	public ResponseEntity<Travel> create(@RequestBody JSONObject trip) {
 		try {
 			if(tripService.isJSONValid(trip.toString())) {
-				Trip tripCreated = tripService.create(trip);
+				Travel tripCreated = tripService.create(trip);
 				var uri = ServletUriComponentsBuilder.fromCurrentRequest()
 						.path(tripCreated.getOrderCode()).build().toUri();
 				
-				if(tripService.isInitialDateGreaterThanFinalDate(tripCreated)){
-					logger.error("The initial date is greater than final date.");
+				if(tripService.isStartDateGreaterThanEndDate(tripCreated)){
+					logger.error("The start date is greater than end date.");
 					return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
 				}else {
 					tripService.add(tripCreated);
@@ -142,10 +142,10 @@ public class TripController {
 	 * @param trip, where: 
 	 * 
 	 * id - trip id; 
-	 * orderCode - identification number of a trip in the system; 
+	 * orderNumber - identification number of a trip in the system; 
 	 * amount – transaction amount; a string of arbitrary length that is parsable as a BigDecimal; 
-	 * initialDate – initial date time in the ISO 8601 format YYYY-MM-DDThh:mm:ss.sssZ in the Local timezone;
-	 * finalDate – final date time in the ISO 8601 format YYYY-MM-DDThh:mm:ss.sssZ in the Local timezone; 
+	 * startDate – initial date time in the ISO 8601 format YYYY-MM-DDThh:mm:ss.sssZ in the Local time zone;
+	 * endDate – final date time in the ISO 8601 format YYYY-MM-DDThh:mm:ss.sssZ in the Local time zone; 
 	 * type - trip type: RETURN (with a date to begin and end), ONE_WAY (only with initial date), 
 	 * MULTI_CITY (with multiple destinations);
 	 * 
@@ -157,15 +157,15 @@ public class TripController {
 	 * 500 - Server Errors: something went wrong on API end (These are rare).
 	 */
 	@PutMapping(path = "/{id}", produces = { "application/json" })
-	public ResponseEntity<Trip> update(@PathVariable("id") long id, @RequestBody JSONObject trip) {
+	public ResponseEntity<Travel> update(@PathVariable("id") long id, @RequestBody JSONObject trip) {
 		try {
 			if(tripService.isJSONValid(trip.toString())) {
-				Trip tripToUpdate = tripService.findById(id);
+				Travel tripToUpdate = tripService.findById(id);
 				if(tripToUpdate == null){
-					logger.error("The trip not found.");
+					logger.error("Travel not found.");
 					return ResponseEntity.notFound().build(); 
 				}else {
-					Trip tripUpdated = tripService.update(tripToUpdate, trip);
+					Travel tripUpdated = tripService.update(tripToUpdate, trip);
 					return ResponseEntity.ok(tripUpdated);
 				}
 			}else {
@@ -176,5 +176,4 @@ public class TripController {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
 		}
 	}
-
 }

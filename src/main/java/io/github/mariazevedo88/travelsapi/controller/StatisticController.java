@@ -1,4 +1,4 @@
-package io.github.mariazevedo88.tripsapi.controller;
+package io.github.mariazevedo88.travelsapi.controller;
 
 import java.util.List;
 
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.mariazevedo88.tripsapi.model.Statistic;
-import io.github.mariazevedo88.tripsapi.model.Trip;
-import io.github.mariazevedo88.tripsapi.service.StatisticService;
-import io.github.mariazevedo88.tripsapi.service.TripService;
+import io.github.mariazevedo88.travelsapi.model.Statistic;
+import io.github.mariazevedo88.travelsapi.model.Travel;
+import io.github.mariazevedo88.travelsapi.service.StatisticService;
+import io.github.mariazevedo88.travelsapi.service.TravelService;
 
 /**
  * SpringBoot RestController that creates all service end-points related to the statistics.
@@ -27,7 +27,7 @@ public class StatisticController {
 	private static final Logger logger = Logger.getLogger(StatisticController.class);
 	
 	@Autowired
-	private TripService tripsService;
+	private TravelService tripsService;
 	
 	@Autowired
 	private StatisticService statisticsService;
@@ -44,7 +44,7 @@ public class StatisticController {
 	@GetMapping(produces = { "application/json" })
 	public ResponseEntity<Statistic> getStatistics() {
 		
-		List<Trip> trips = tripsService.find();
+		List<Travel> trips = tripsService.find();
 		Statistic statistics = statisticsService.create(trips);
 		
 		logger.info(statistics);

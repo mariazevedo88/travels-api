@@ -1,4 +1,4 @@
-# trips-api
+# travels-api
 
 Uma API em Java e Spring Framework para gerenciamento de viagens.
 
@@ -6,17 +6,17 @@ Uma API em Java e Spring Framework para gerenciamento de viagens.
 
 Nossa API deve criar, atualizar, deletar e listar viagens. Além disso, deve calcular estatísticas sobre as viagens criadas. A API terá os seguintes endpoints:
 
-`POST/trips`: cria uma viagem. 
+`POST/api-travels/v1/travels`: cria uma viagem. 
 
 **Body:**
 
 <code>
 {
   "id": 1,
-  "orderCode": "220788",
+  "orderNumber": "220788",
   "amount": "22.88",
-  "initialDate": "2019-09-11T09:59:51.312Z",
-  "finalDate": "2019-09-21T21:05:06.500Z",
+  "startDate": "2019-09-11T09:59:51.312Z",
+  "endDate": "2019-09-21T21:05:06.500Z",
   "type": "RETURN"
 }
 </code>
@@ -24,7 +24,7 @@ Nossa API deve criar, atualizar, deletar e listar viagens. Além disso, deve cal
 **Where:**
 
 `id`: número único da viagem;
-`orderCode`: número de identificação da viagem no sistema.
+`orderNumber`: número de identificação da viagem no sistema.
 `amount`: valor da transação; deve ser uma String de tamanho arbitrário que pode ser parseada como um BigDecimal;
 `initialDate`: data de início da viagem no formato ISO 8601 YYYY-MM-DDThh:mm:ss.sssZ no timezone local.
 `finalDate`: data de fim da viagem no formato ISO 8601 YYYY-MM-DDThh:mm:ss.sssZ no timezone local.
@@ -37,16 +37,16 @@ Deve retornar com body vazio com um dos códigos a seguir:
 * 422: se qualquer um dos campos não for parseável ou se a data de início for mais ao futuro que a data final.
 * 500: erro no servidor (são raros)
 
-`PUT/trips/{id}`: atualiza uma viagem.
+`PUT/api-travels/v1/travels/{id}`: atualiza uma viagem.
 
 **Body:**
 
 <code>
 {
-  "orderCode": "220788",
+  "orderNumber": "220788",
   "amount": "50.50",
-  "initialDate": "2019-09-11T09:59:51.312Z",
-  "finalDate": "2019-09-21T21:05:06.500Z",
+  "startDate": "2019-09-11T09:59:51.312Z",
+  "endDate": "2019-09-21T21:05:06.500Z",
   "type": "RETURN"
 }
 </code>
@@ -56,10 +56,10 @@ Deve ser enviado o objeto que será modificado. O retorno deve ser o próprio ob
 <code>
 {
   "id": 1,
-  "orderCode": "220788",
+  "orderNumber": "220788",
   "amount": "50.50",
-  "initialDate": "2019-09-11T09:59:51.312Z",
-  "finalDate": "2019-09-21T21:05:06.500Z",
+  "startDate": "2019-09-11T09:59:51.312Z",
+  "endDate": "2019-09-21T21:05:06.500Z",
   "type": "RETURN"
 }
 </code>
@@ -71,7 +71,7 @@ A resposta deve conter os códigos a seguir:
 * 404: caso tentem atualizar um registro que não existe.
 * 422: se qualquer um dos campos não for parseável (JSON mal formatado).
 
-`GET/trips`: retorna todas as viagens criadas.
+`GET/api-travels/v1/travels`: retorna todas as viagens criadas.
 
 Deve retornar uma lista de viagens.
 
@@ -98,11 +98,11 @@ A resposta deve conter os códigos a seguir:
 * 200: caso exista viagens cadastradas
 * 404: caso não exista viagens criadas.
 
-`DELETE/trips`: remove todas as viagens.
+`DELETE/api-travels/v1/travels`: remove todas as viagens.
 
 Deve aceitar uma requisição com body vazio e retornar 204.
 
-`GET/statistics`: retorna estatísticas básicas sobre as viagens criadas.
+`GET/api-travels/v1/statistics`: retorna estatísticas básicas sobre as viagens criadas.
 
 <code>
 {   
@@ -142,7 +142,7 @@ mvn integration-test
 Para rodar a API via .jar:
 
 ```
-java -jar trips-api-2.0.0.jar --spring.profiles.active=dev
+java -jar travels-api-2.0.0.jar --spring.profiles.active=dev
 ```
     
 ou

@@ -1,4 +1,4 @@
-package io.github.mariazevedo88.tripsapi.model;
+package io.github.mariazevedo88.travelsapi.model;
 
 import java.math.BigDecimal;
 
@@ -12,12 +12,11 @@ import lombok.Setter;
  * 
  * @author Mariana Azevedo
  * @since 14/09/2019
- * 
  */
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Statistic {
 	
 	private BigDecimal sum;

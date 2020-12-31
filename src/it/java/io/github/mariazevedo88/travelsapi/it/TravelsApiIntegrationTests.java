@@ -41,7 +41,7 @@ import io.github.mariazevedo88.travelsapi.enumeration.TravelTypeEnum;
 @TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class })
-public class TravelsApiIT {
+public class TravelsApiIntegrationTests {
 	
 	@Autowired
     private MockMvc mockMvc;
@@ -57,7 +57,7 @@ public class TravelsApiIT {
 	public void shouldReturnCreateTravel() throws Exception {
 
 		JSONObject mapToCreate = setObjectToCreate();
-		this.mockMvc.perform(post("/api-travels/v1/travels").contentType(MediaType.APPLICATION_JSON_VALUE)
+		this.mockMvc.perform(post("/api-travels/travels").contentType(MediaType.APPLICATION_JSON_VALUE)
         		.content(new ObjectMapper().writeValueAsString(mapToCreate))).andExpect(status().isCreated());
 	}
 	
@@ -66,20 +66,20 @@ public class TravelsApiIT {
 	public void shouldReturnUpdateTravel() throws Exception {
 		
 		JSONObject mapToUpdate = setObjectToUpdate();
-		this.mockMvc.perform(put("/api-travels/v1/travels/1").contentType(MediaType.APPLICATION_JSON_VALUE)
+		this.mockMvc.perform(put("/api-travels/travels/1").contentType(MediaType.APPLICATION_JSON_VALUE)
         		.content(new ObjectMapper().writeValueAsString(mapToUpdate))).andExpect(status().isOk());
 	}
 
 	@Test
 	@Order(4)
     public void shouldReturnGetAllTravels() throws Exception {
-		this.mockMvc.perform(get("/api-travels/v1/travels")).andExpect(status().isOk());
+		this.mockMvc.perform(get("/api-travels/travels")).andExpect(status().isOk());
     }
 	
 	@Test
 	@Order(5)
     public void shouldReturnRemoveAllTravels() throws Exception {
-		this.mockMvc.perform(delete("/api-travels/v1/travels")).andExpect(status().isNoContent());
+		this.mockMvc.perform(delete("/api-travels/travels")).andExpect(status().isNoContent());
     }
 	
 	@SuppressWarnings("unchecked")

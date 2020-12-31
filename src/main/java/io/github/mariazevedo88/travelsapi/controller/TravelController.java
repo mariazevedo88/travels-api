@@ -28,7 +28,7 @@ import io.github.mariazevedo88.travelsapi.service.TravelService;
  * @since 14/09/2019
  */
 @RestController
-@RequestMapping("/api-travels/v1/travels")
+@RequestMapping("/api-travels/travels")
 public class TravelController {
 	
 	private static final Logger logger = Logger.getLogger(TravelController.class);

@@ -6,7 +6,7 @@ Uma API em Java e Spring Framework para gerenciamento de viagens.
 
 Nossa API deve criar, atualizar, deletar e listar viagens. Além disso, deve calcular estatísticas sobre as viagens criadas. A API terá os seguintes endpoints:
 
-`POST/api-travels/v1/travels`: cria uma viagem. 
+`POST/api-travels/travels`: cria uma viagem. 
 
 **Body:**
 
@@ -26,8 +26,8 @@ Nossa API deve criar, atualizar, deletar e listar viagens. Além disso, deve cal
 `id`: número único da viagem;
 `orderNumber`: número de identificação da viagem no sistema.
 `amount`: valor da transação; deve ser uma String de tamanho arbitrário que pode ser parseada como um BigDecimal;
-`initialDate`: data de início da viagem no formato ISO 8601 YYYY-MM-DDThh:mm:ss.sssZ no timezone local.
-`finalDate`: data de fim da viagem no formato ISO 8601 YYYY-MM-DDThh:mm:ss.sssZ no timezone local.
+`startDate`: data de início da viagem no formato ISO 8601 YYYY-MM-DDThh:mm:ss.sssZ no timezone local.
+`endDate`: data de fim da viagem no formato ISO 8601 YYYY-MM-DDThh:mm:ss.sssZ no timezone local. Pode ser nulo se a viagem é só de ida.
 `type`: se a viagem é somente de ida (ONE-WAY), ida e volta (RETURN) ou múltiplos destinos (MULTI-CITY).
 
 Deve retornar com body vazio com um dos códigos a seguir:
@@ -37,7 +37,7 @@ Deve retornar com body vazio com um dos códigos a seguir:
 * 422: se qualquer um dos campos não for parseável ou se a data de início for mais ao futuro que a data final.
 * 500: erro no servidor (são raros)
 
-`PUT/api-travels/v1/travels/{id}`: atualiza uma viagem.
+`PUT/api-travels/travels/{id}`: atualiza uma viagem.
 
 **Body:**
 
@@ -71,7 +71,7 @@ A resposta deve conter os códigos a seguir:
 * 404: caso tentem atualizar um registro que não existe.
 * 422: se qualquer um dos campos não for parseável (JSON mal formatado).
 
-`GET/api-travels/v1/travels`: retorna todas as viagens criadas.
+`GET/api-travels/travels`: retorna todas as viagens criadas.
 
 Deve retornar uma lista de viagens.
 
@@ -98,11 +98,11 @@ A resposta deve conter os códigos a seguir:
 * 200: caso exista viagens cadastradas
 * 404: caso não exista viagens criadas.
 
-`DELETE/api-travels/v1/travels`: remove todas as viagens.
+`DELETE/api-travels/travels`: remove todas as viagens.
 
 Deve aceitar uma requisição com body vazio e retornar 204.
 
-`GET/api-travels/v1/statistics`: retorna estatísticas básicas sobre as viagens criadas.
+`GET/api-travels/statistics`: retorna estatísticas básicas sobre as viagens criadas.
 
 <code>
 {   
@@ -142,7 +142,7 @@ mvn integration-test
 Para rodar a API via .jar:
 
 ```
-java -jar travels-api-2.0.0.jar --spring.profiles.active=dev
+java -jar travels-api-2.0.1.jar --spring.profiles.active=dev
 ```
     
 ou
